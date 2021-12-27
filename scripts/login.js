@@ -1,39 +1,30 @@
+import { getJSON, postJSON, newFormData } from './helpers.js';
+
 async function login() {
-  email = document.getElementById('email').value;
-  password = document.getElementById('password').value;
+  const email = document.getElementById('email').value;
+  const password = document.getElementById('password').value;
 
   if (!email || !password) alert('Necesita ingresar las credenciales');
 
-  let formData = new FormData();
-  formData.append('email', email);
-  formData.append('password', password);
-  const response = await fetch('../phps/login.php', {
-    method: 'POST',
-    body: formData,
-  });
-  const res = await response.json();
-
-  console.log(res);
+  const formData = newFormData({ email, password });
+  const data = await postJSON('../phps/login.php', formData);
 }
+window.login = login;
+
+async function register() {
+  const email = document.getElementById('email').value;
+  const password = document.getElementById('password').value;
+
+  if (!email || !password) alert('Necesita ingresar las credenciales');
+
+  const formData = newFormData({ email, password });
+  const data = await postJSON('../phps/register.php', formData);
+  alert('Usuario creado correctamente, ya puede iniciar sesion con el mismo');
+}
+window.register = register;
 
 //EVENT LISTENERS
 const form = document.querySelector('.login-form');
 form.addEventListener('submit', (e) => {
   e.preventDefault();
 });
-
-async function register() {
-  email = document.getElementById('email').value;
-  password = document.getElementById('password').value;
-
-  let formData = new FormData();
-  formData.append('email', email);
-  formData.append('password', password);
-  console.log(formData);
-  const response = await fetch('../phps/register.php', {
-    method: 'POST',
-    body: formData,
-  });
-  const res = await response.json();
-  console.log(res);
-}
