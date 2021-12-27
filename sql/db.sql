@@ -1,0 +1,8 @@
+CREATE DATABASE tarjetas;
+
+CREATE TABLE usuarios (
+  id SERIAL PRIMARY KEY,
+  email VARCHAR(30) NOT NULL,
+  password VARCHAR(30) NOT NULL
+);
+
