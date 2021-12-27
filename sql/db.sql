@@ -1,8 +1,31 @@
-CREATE DATABASE tarjetas;
+CREATE DATABASE whiteboard_db;
 
-CREATE TABLE usuarios (
+CREATE TABLE cards (
+	id SERIAL PRIMARY KEY,
+	id_state INT NOT NULL,
+	FOREIGN KEY (id_state) REFERENCES states,
+	text VARCHAR NOT NULL
+)
+
+CREATE TABLE states (
+	id SERIAL PRIMARY KEY,
+	id_workflow INT NOT NULL,
+	FOREIGN KEY (id_workflow) REFERENCES workflows,
+	category VARCHAR NOT NULL
+)
+
+CREATE TABLE workflows (
+	id SERIAL PRIMARY KEY,
+	id_user INT NOT NULL,
+	FOREIGN KEY (id_user) REFERENCES users,
+	name VARCHAR NOT NULL,
+	description VARCHAR NOT NULL,
+	creation_date DATE NOT NULL DEFAULT CURRENT_DATE
+)
+
+CREATE TABLE users (
   id SERIAL PRIMARY KEY,
-  email VARCHAR(30) NOT NULL,
-  password VARCHAR(30) NOT NULL
+  email VARCHAR NOT NULL,
+  password VARCHAR NOT NULL
 );
 

@@ -9,7 +9,7 @@ function obtener_coneccion()
     /*cambiar los parámetros de conección a la base de datos*/ 
     $host="localhost";
     $port="5432";
-    $dbname="tarjetas";
+    $dbname="whiteboard_db";
     $user="postgres";
     $password="12345";
     $conn=pg_connect("host=$host port=$port dbname=$dbname user=$user password=$password");

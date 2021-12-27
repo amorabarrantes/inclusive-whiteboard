@@ -14,7 +14,7 @@ $password=$_REQUEST["password"];
 
 
 $conn = obtener_coneccion();
-$result = ejecutar_query($conn, "select id,email from usuarios where email='$email' and password=md5('$password');");
+$result = ejecutar_query($conn, "select id,email from users where email='$email' and password=md5('$password');");
 if ($row=pg_fetch_row ($result))
 {
     $_SESSION["id_usuario"]=$row[0];

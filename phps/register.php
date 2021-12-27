@@ -15,7 +15,7 @@ $password=$_REQUEST["password"];
 
 $conn = obtener_coneccion();
 try {
-  $result = ejecutar_query($conn, "INSERT INTO usuarios (email, password) VALUES ('$email', md5('$password')) RETURNING *");
+  $result = ejecutar_query($conn, "INSERT INTO users (email, password) VALUES ('$email', md5('$password')) RETURNING *");
   if ($row=pg_fetch_row ($result))
   {
       $_SESSION["id_usuario"]=$row[0];
