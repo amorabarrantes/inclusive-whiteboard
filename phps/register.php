@@ -18,13 +18,11 @@ try {
   $result = ejecutar_query($conn, "INSERT INTO users (email, password) VALUES ('$email', md5('$password')) RETURNING *");
   if ($row=pg_fetch_row ($result))
   {
-      $_SESSION["id_usuario"]=$row[0];
-      $_SESSION["email_usuario"]=$row[1];
-      echo json_encode(array('id_usuario'=>$row[0],'email'=>$row[1], 'result'=> true));
+      echo json_encode(array('id_user'=>$row[0],'email'=>$row[1], 'result'=> true));
   }
 } catch (\Throwable $th) {
   ob_end_clean();
-  echo json_encode(array('result'=> false, 'error'=>'Ya existen esas credenciales'));
+  echo json_encode(array('result'=> false, 'error'=>'Credentials already exist'));
   
   
 }

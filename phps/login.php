@@ -17,13 +17,11 @@ $conn = obtener_coneccion();
 $result = ejecutar_query($conn, "select id,email from users where email='$email' and password=md5('$password');");
 if ($row=pg_fetch_row ($result))
 {
-    $_SESSION["id_usuario"]=$row[0];
-    $_SESSION["email_usuario"]=$row[1];
-    echo json_encode(array('id_usuario'=>$row[0],'email'=>$row[1], 'result'=> true));
+    echo json_encode(array('id_user'=>$row[0],'email'=>$row[1], 'result'=> true));
 }
 else
 {
-    echo json_encode(array('result'=> false, 'error'=>'Las credenciales del usuario no son validas'));
+    echo json_encode(array('result'=> false, 'error'=>'The user credentials are not valid'));
 }
 pg_close($conn);
 ?>

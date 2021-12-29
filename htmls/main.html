@@ -10,9 +10,56 @@
   </head>
   <body>
     <header class="main-header">
-      <div></div>
+      <label>Workflow</label>
+      <div>
+        <select id="workflow-cb"></select>
+        <button id="new-workflow">New</button>
+      </div>
+
       <button onclick="logout()">Sign out</button>
     </header>
     <section class="state-container"></section>
+    <div id="myModal" class="modal">
+      <!-- Modal content -->
+      <div class="modal-content">
+        <span class="close">&times;</span>
+        <div class="form-wrapper">
+          <form class="new-workflow-form">
+            <table>
+              <thead align="center">
+                <tr>
+                  <td colspan="2"><h3>New Workflow Form</h3></td>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><label for="name">Name</label></td>
+                  <td>
+                    <input id="new-workflow-name" type="text" name="name" />
+                  </td>
+                </tr>
+                <tr>
+                  <td><label for="description">Description</label></td>
+                  <td>
+                    <input
+                      id="new-workflow-description"
+                      type="text"
+                      name="description"
+                    />
+                  </td>
+                </tr>
+              </tbody>
+              <tfoot align="center">
+                <tr>
+                  <td colspan="2">
+                    <button onclick="addWorkflow()">Add</button>
+                  </td>
+                </tr>
+              </tfoot>
+            </table>
+          </form>
+        </div>
+      </div>
+    </div>
   </body>
 </html>

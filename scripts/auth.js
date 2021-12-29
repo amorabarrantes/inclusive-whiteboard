@@ -3,21 +3,20 @@ async function login() {
   const email = document.getElementById('email').value;
   const password = document.getElementById('password').value;
 
-  if (!email || !password) alert('Necesita ingresar las credenciales');
+  if (!email || !password) alert('You need to add the credentials');
 
   const formData = newFormData({ email, password });
   const data = await postJSON('../phps/login.php', formData);
-  console.log(data);
   if (data.result) {
     window.localStorage.setItem(
       'user',
       JSON.stringify({
-        usuario: data.id_usuario,
+        id_user: data.id_user,
       })
     );
     window.location = '../htmls/main.html';
   } else {
-    alert('Usuario o contraseña incorrecto');
+    alert('Incorrect user, try again');
   }
 }
 window.login = login;
@@ -26,7 +25,7 @@ async function register() {
   const email = document.getElementById('email').value;
   const password = document.getElementById('password').value;
 
-  if (!email || !password) alert('Necesita ingresar las credenciales');
+  if (!email || !password) alert('You need to add the credentials');
 
   const formData = newFormData({ email, password });
   const data = await postJSON('../phps/register.php', formData);
@@ -35,12 +34,12 @@ async function register() {
     window.localStorage.setItem(
       'user',
       JSON.stringify({
-        usuario: data.id_usuario,
+        id_user: data.id_user,
       })
     );
     window.location = '../htmls/main.html';
   } else {
-    alert('Credenciales repetidas, intente de nuevo');
+    alert('Repeated credentials, try again');
   }
 }
 window.register = register;
