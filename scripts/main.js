@@ -1,6 +1,8 @@
 import { newFormData, postJSON } from './helpers.js';
 const userId = JSON.parse(window.localStorage.getItem('user')).id_user;
 const modal = document.getElementById('myModal');
+const workflowCb = document.getElementById('workflow-cb');
+
 
 function logout() {
   window.localStorage.removeItem('user');
@@ -15,16 +17,17 @@ async function getWorkflows() {
     '../phps/workflows/getWorkflows.php',
     formData
   );
-  const workflowCb = document.getElementById('workflow-cb');
   workflowCb.innerHTML = '';
   workflowsArray.forEach((workflow) => {
     const markup = `
-    <option value="${workflow.name}">
+    <option value="${workflow.name}" data-id=${workflow.id}>
     ${workflow.name}
     </option>
     `;
     workflowCb.insertAdjacentHTML('afterbegin', markup);
   });
+
+  showWorkflowStates();
 }
 
 async function addWorkflow() {
@@ -70,6 +73,30 @@ function toggleModal() {
       modal.style.display = 'none';
     }
   };
+};
+
+async function showWorkflowStates() {
+  const id_workflow = workflowCb.options[workflowCb.selectedIndex]?.dataset.id;
+
+  const formData = newFormData({ id_workflow });
+  const statesArray = await postJSON(
+    '../phps/states/getStates.php',
+    formData
+  );
+
+  const stateContainer = document.querySelector('.state-container');
+  stateContainer.innerHTML = '';
+
+  statesArray.reverse().forEach((state) => {
+    const markup = `
+    <div class="state">
+      <header class="state-header">
+        <h1>${state.category}</h1>
+      </header>
+    </div>
+    `;
+    stateContainer.insertAdjacentHTML('afterbegin', markup);
+  });
 }
 
 // EVENT LISTENERS
@@ -77,6 +104,8 @@ const form = document.querySelector('.new-workflow-form');
 form.addEventListener('submit', (e) => {
   e.preventDefault();
 });
+
+workflowCb.addEventListener('change', showWorkflowStates);
 
 function init() {
   getWorkflows();

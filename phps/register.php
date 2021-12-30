@@ -22,9 +22,7 @@ try {
   }
 } catch (\Throwable $th) {
   ob_end_clean();
-  echo json_encode(array('result'=> false, 'error'=>'Credentials already exist'));
-  
-  
+  echo json_encode(array('result'=> false, 'error'=>'Credentials already exist'));  
 }
 pg_close($conn);
 ?>

@@ -1,3 +1,5 @@
+/* General database */
+
 CREATE DATABASE whiteboard_db;
 
 CREATE TABLE cards (
@@ -28,4 +30,24 @@ CREATE TABLE users (
   email VARCHAR NOT NULL,
   password VARCHAR NOT NULL
 );
+
+
+/* TRIGGER DEFAUT STATES */
+
+/* First create the function */
+CREATE FUNCTION addDefaultStatesProcedure()
+RETURNS trigger
+as $$
+DECLARE
+    id_workflow integer := (SELECT max(id) FROM workflows);
+BEGIN
+  	insert into states (id_workflow, category) values (id_workflow, 'to do');
+	insert into states (id_workflow, category) values (id_workflow, 'in progress');
+  	insert into states (id_workflow, category) values (id_workflow, 'completed');
+	RETURN NEW;
+END;
+$$ LANGUAGE 'plpgsql';
+
+/* Second bind the trigger */
+CREATE TRIGGER addDefaultStates AFTER INSERT ON workflows EXECUTE PROCEDURE addDefaultStatesProcedure()
 

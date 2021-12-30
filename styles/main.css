@@ -1,3 +1,4 @@
+*,
 h1,
 h2,
 h3,
@@ -6,6 +7,26 @@ h5,
 h6 {
   padding: 0;
   margin: 0;
+}
+
+html,
+body {
+  height: 100%;
+}
+
+.background {
+  background: url("../images/background-2.jpg") rgba(0, 0, 0, 0.61);
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-blend-mode: darken;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: -1;
+  filter: blur(3px);
+  min-height: 800px;
 }
 
 .main-header {
@@ -72,4 +93,41 @@ h6 {
 
 td {
   padding: 0.5em 0.2em;
+}
+
+.state-container {
+  display: flex;
+  width: fit-content;
+  max-width: 80%;
+  height: 90%;
+  margin: 1em auto;
+  gap: 1em;
+  overflow-x: scroll;
+  padding: 1em;
+}
+
+.state {
+  text-align: center;
+  background: linear-gradient(
+    45deg,
+    rgba(0, 13, 71, 0.7) 0%,
+    rgba(0, 26, 154, 0.7) 16%,
+    rgba(0, 1, 255, 0.7) 67%
+  );
+
+  border: 0.3em black solid;
+  border-radius: 1em;
+  padding: 1em;
+  min-width: 20em;
+}
+
+.state-header {
+  border-bottom: 0.2em black solid;
+  background-color: lightblue;
+  border-radius: 1em;
+}
+
+.state-header > h1 {
+  text-transform: uppercase;
+  padding: 0.3em;
 }
