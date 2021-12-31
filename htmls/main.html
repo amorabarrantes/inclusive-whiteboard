@@ -20,7 +20,14 @@
       <button onclick="logout()">Sign out</button>
     </header>
 
-    <section class="state-container"></section>
+    <section class="state-container">
+      <div class="state">
+        <header class="state-header">
+          <h1>ejemplo</h1>
+        </header>
+      </div>
+    </section>
+
     <div id="myModal" class="modal">
       <!-- Modal content -->
       <div class="modal-content">
@@ -55,6 +62,38 @@
                 <tr>
                   <td colspan="2">
                     <button onclick="addWorkflow()">Add</button>
+                  </td>
+                </tr>
+              </tfoot>
+            </table>
+          </form>
+        </div>
+      </div>
+    </div>
+    <div id="myModal2" class="modal">
+      <!-- Modal content -->
+      <div class="modal-content">
+        <span class="close">&times;</span>
+        <div class="form-wrapper">
+          <form class="new-state-form">
+            <table>
+              <thead align="center">
+                <tr>
+                  <td colspan="2"><h3>New State Form</h3></td>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><label for="category">Category</label></td>
+                  <td>
+                    <input id="new-state-category" type="text" name="name" />
+                  </td>
+                </tr>
+              </tbody>
+              <tfoot align="center">
+                <tr>
+                  <td colspan="2">
+                    <button onclick="">Add</button>
                   </td>
                 </tr>
               </tfoot>

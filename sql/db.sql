@@ -13,7 +13,8 @@ CREATE TABLE states (
 	id SERIAL PRIMARY KEY,
 	id_workflow INT NOT NULL,
 	FOREIGN KEY (id_workflow) REFERENCES workflows,
-	category VARCHAR NOT NULL
+	category VARCHAR NOT NULL,
+	counter INT not null
 )
 
 CREATE TABLE workflows (
@@ -41,13 +42,34 @@ as $$
 DECLARE
     id_workflow integer := (SELECT max(id) FROM workflows);
 BEGIN
-  	insert into states (id_workflow, category) values (id_workflow, 'to do');
-	insert into states (id_workflow, category) values (id_workflow, 'in progress');
-  	insert into states (id_workflow, category) values (id_workflow, 'completed');
-	RETURN NEW;
+      insert into states (id_workflow, category, counter) values (id_workflow, 'to do', 0);
+    insert into states (id_workflow, category, counter) values (id_workflow, 'in progress', 1);
+      insert into states (id_workflow, category, counter) values (id_workflow, 'completed', 2);
+    RETURN NEW;
 END;
 $$ LANGUAGE 'plpgsql';
+
 
 /* Second bind the trigger */
 CREATE TRIGGER addDefaultStates AFTER INSERT ON workflows EXECUTE PROCEDURE addDefaultStatesProcedure()
 
+
+
+
+/* TRIGGER UPDATE STATES */
+CREATE FUNCTION updateStatesCounter()
+RETURNS trigger
+as $$
+DECLARE
+    inserted_state_id integer := (SELECT max(id) FROM states);
+    inserted_workflow_id integer := (select id_workflow from states where id = inserted_state_id);
+    inserted_state_counter integer := (select counter from states where id = inserted_state_id);
+BEGIN
+    UPDATE states SET counter = counter + 1 WHERE id_workflow = inserted_workflow_id and id != inserted_state_id and counter >= inserted_state_counter;
+    
+    RETURN NEW;
+END;
+$$ LANGUAGE 'plpgsql';
+
+/* Second bind the trigger */
+CREATE TRIGGER updateStatesCounterTrigger AFTER INSERT ON states EXECUTE PROCEDURE updateStatesCounter()

@@ -15,7 +15,7 @@ body {
 }
 
 .background {
-  background: url("../images/background-2.jpg") rgba(0, 0, 0, 0.61);
+  background: url('../images/background-2.jpg') rgba(0, 0, 0, 0.61);
   background-repeat: no-repeat;
   background-size: cover;
   background-blend-mode: darken;
@@ -47,7 +47,8 @@ body {
   border: 1px dotted black;
 }
 
-.new-workflow-form {
+.new-workflow-form,
+.new-state-form {
   /* border: solid black 1px; */
   width: fit-content;
 }
@@ -106,6 +107,8 @@ td {
   padding: 1em;
 }
 
+/* STATES */
+
 .state {
   text-align: center;
   background: linear-gradient(
@@ -130,4 +133,29 @@ td {
 .state-header > h1 {
   text-transform: uppercase;
   padding: 0.3em;
+}
+
+.state-body {
+  display: flex;
+  height: 90%;
+}
+
+.state-buttons {
+  width: 10%;
+  display: flex;
+  align-items: center;
+}
+
+.state-cards {
+  width: 80%;
+}
+
+.state-button {
+  stroke: rgb(255, 255, 255);
+  cursor: pointer;
+  transition: background-color 0.2s;
+  border-radius: 50%;
+}
+.state-button:hover {
+  background-color: rgba(0, 0, 0, 0.527);
 }
