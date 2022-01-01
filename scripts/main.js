@@ -4,6 +4,9 @@ const modal = document.getElementById('myModal');
 const stateModal = document.getElementById('myModal2');
 const workflowCb = document.getElementById('workflow-cb');
 
+//new state info
+let counter;
+
 function logout() {
   window.localStorage.removeItem('user');
   window.location = '../htmls/index.html';
@@ -89,13 +92,16 @@ async function showWorkflowStates() {
   const statesArray = await postJSON('../phps/states/getStates.php', formData);
 
   const stateContainer = document.querySelector('.state-container');
-  //stateContainer.innerHTML = '';
+  stateContainer.innerHTML = '';
 
   statesArray.reverse().forEach((state) => {
     const markup = `
     <div class="state" id="state-${state.id}" data-counter="${state.counter}">
       <header class="state-header">
         <h1>${state.category}</h1>
+        <svg xmlns="http://www.w3.org/2000/svg" class="delete-btn state-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+        </svg>
       </header>
       <section class="state-body">
           <div class="state-buttons">
@@ -114,7 +120,7 @@ async function showWorkflowStates() {
               />
             </svg>
           </div>
-          <div class="state-cards">hola</div>
+          <div class="state-cards"></div>
           <div class="state-buttons">
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -136,21 +142,27 @@ async function showWorkflowStates() {
     `;
     stateContainer.insertAdjacentHTML('afterbegin', markup);
     const stateElement = document.getElementById(`state-${state.id}`);
+
+    //listeners de los botones de agregar state
     const buttons = stateElement.querySelectorAll('.state-button');
-
-    //contador del state
-
-    //boton izquierdo
-
     buttons.forEach((btn, index) => {
       btn.addEventListener('click', () => {
         console.log(stateModal);
         stateModal.style.display = 'block';
-        var counter =
+        counter =
           index === 0
             ? stateElement.dataset.counter
-            : stateElement.dataset.counter++;
+            : ++stateElement.dataset.counter;
       });
+    });
+
+    //listener borrar state
+    const deleteStateBtn = stateElement.querySelector('.delete-btn');
+    deleteStateBtn.addEventListener('click', async () => {
+      const formData = newFormData({ id_state: state.id });
+      const data = await postJSON('../phps/states/deleteState.php', formData);
+      console.log(data);
+      stateElement.remove();
     });
   });
 }
@@ -162,8 +174,14 @@ form.addEventListener('submit', (e) => {
 });
 
 const stateForm = document.querySelector('.new-state-form');
-stateForm.addEventListener('submit', (e) => {
+stateForm.addEventListener('submit', async (e) => {
   e.preventDefault();
+  const id_workflow = workflowCb.options[workflowCb.selectedIndex]?.dataset.id;
+  const category = document.getElementById('new-state-category').value;
+  const formData = newFormData({ id_workflow, category, counter });
+  await postJSON('../phps/states/addState.php', formData);
+  stateModal.style.display = 'none';
+  showWorkflowStates();
 });
 
 workflowCb.addEventListener('change', showWorkflowStates);

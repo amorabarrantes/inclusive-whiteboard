@@ -20,13 +20,7 @@
       <button onclick="logout()">Sign out</button>
     </header>
 
-    <section class="state-container">
-      <div class="state">
-        <header class="state-header">
-          <h1>ejemplo</h1>
-        </header>
-      </div>
-    </section>
+    <section class="state-container"></section>
 
     <div id="myModal" class="modal">
       <!-- Modal content -->
@@ -86,7 +80,12 @@
                 <tr>
                   <td><label for="category">Category</label></td>
                   <td>
-                    <input id="new-state-category" type="text" name="name" />
+                    <input
+                      id="new-state-category"
+                      type="text"
+                      name="name"
+                      maxlength="15"
+                    />
                   </td>
                 </tr>
               </tbody>
