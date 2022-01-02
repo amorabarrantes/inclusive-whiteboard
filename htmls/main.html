@@ -9,15 +9,17 @@
     <title>Whiteboard</title>
   </head>
   <body>
-    <div class="background"></div>
+    <!-- <div class="background"></div> -->
     <header class="main-header">
-      <label>Workflow</label>
+      <h2>FANCYBOARD</h2>
+
       <div>
-        <select id="workflow-cb"></select>
-        <button id="new-workflow">New</button>
+        <label for="workflow"><strong>Workflow</strong></label>
+        <select name="workflow" id="workflow-cb"></select>
+        <button id="new-workflow" class="btn-header">New</button>
       </div>
 
-      <button onclick="logout()">Sign out</button>
+      <button onclick="logout()" class="btn-header">Sign out</button>
     </header>
 
     <section class="state-container"></section>
