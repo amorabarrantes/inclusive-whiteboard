@@ -5,14 +5,14 @@ CREATE DATABASE whiteboard_db;
 CREATE TABLE cards (
 	id SERIAL PRIMARY KEY,
 	id_state INT NOT NULL,
-	FOREIGN KEY (id_state) REFERENCES states,
+	FOREIGN KEY (id_state) REFERENCES states ON DELETE CASCADE,
 	text VARCHAR NOT NULL
 )
 
 CREATE TABLE states (
 	id SERIAL PRIMARY KEY,
 	id_workflow INT NOT NULL,
-	FOREIGN KEY (id_workflow) REFERENCES workflows,
+	FOREIGN KEY (id_workflow) REFERENCES workflows ON DELETE CASCADE,
 	category VARCHAR NOT NULL,
 	counter INT not null
 )
@@ -20,7 +20,7 @@ CREATE TABLE states (
 CREATE TABLE workflows (
 	id SERIAL PRIMARY KEY,
 	id_user INT NOT NULL,
-	FOREIGN KEY (id_user) REFERENCES users,
+	FOREIGN KEY (id_user) REFERENCES users ON DELETE CASCADE,
 	name VARCHAR NOT NULL,
 	description VARCHAR NOT NULL,
 	creation_date DATE NOT NULL DEFAULT CURRENT_DATE

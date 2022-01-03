@@ -163,7 +163,7 @@ async function showWorkflowStates() {
     const deleteStateBtn = stateElement.querySelector('.delete-btn');
     deleteStateBtn.addEventListener('click', async () => {
       if (stateElement.parentElement.childElementCount === 1) {
-        alert('Workflows must have at least one state')
+        alert('Workflows must have at least one state');
       } else {
         const formData = newFormData({ id_state: state.id });
         await postJSON('../phps/states/deleteState.php', formData);
@@ -173,10 +173,14 @@ async function showWorkflowStates() {
 
     //listener change.
     const categoryTitle = stateElement.querySelector('.state-category');
-    categoryTitle.addEventListener('focusout', function () {
-      alert('Saved correctly')
-      console.log("hola");
-    }, false);
+    categoryTitle.addEventListener(
+      'focusout',
+      function () {
+        alert('Saved correctly');
+        console.log('hola');
+      },
+      false
+    );
 
     //add Card btn.
     const addCardBtn = stateElement.querySelector('.btn-addCard');
@@ -189,7 +193,9 @@ async function showWorkflowStates() {
 }
 
 async function showStateCards(id_state) {
-  const stateCardElement = document.getElementById(id_state).querySelector('.state-cards');
+  const stateCardElement = document
+    .getElementById(id_state)
+    .querySelector('.state-cards');
   const formData = newFormData({ id_state });
   const data = await postJSON('../phps/cards/getCards.php', formData);
   data.forEach(({ id, text }) => {
@@ -206,10 +212,8 @@ async function showStateCards(id_state) {
     `;
 
     stateCardElement.insertAdjacentHTML('afterbegin', markup);
-  })
-
+  });
 }
-
 
 async function addCard(stateElement) {
   const stateCardsElement = stateElement.querySelector('.state-cards');
@@ -218,12 +222,15 @@ async function addCard(stateElement) {
   const id_state = stateElement.id;
 
   const formData = newFormData({ id_state, text });
-  const { id_card: id, result } = await postJSON('../phps/cards/addCard.php', formData);
+  const { id_card: id, result } = await postJSON(
+    '../phps/cards/addCard.php',
+    formData
+  );
 
   if (!result) return;
 
   const markup = `
-    <div class="card" data-id=${id}>
+    <div class="card animated" data-id=${id}>
       <p contenteditable>${text}</p>
       <footer>
         <input type="color"></>
@@ -234,7 +241,7 @@ async function addCard(stateElement) {
     </div>
   `;
   stateCardsElement.insertAdjacentHTML('afterbegin', markup);
-};
+}
 
 // EVENT LISTENERS
 const form = document.querySelector('.new-workflow-form');

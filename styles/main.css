@@ -1,4 +1,4 @@
-@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@200;400;600;900&display=swap");
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@200;400;600;900&display=swap');
 
 *,
 h1,
@@ -16,12 +16,12 @@ h6 {
 html,
 body {
   height: 100%;
-  font-family: "Poppins";
+  font-family: 'Poppins';
   background-color: rgb(245, 245, 245);
 }
 
 .background {
-  background: url("../images/background-2.jpg") rgba(0, 0, 0, 0.61);
+  background: url('../images/background-2.jpg') rgba(0, 0, 0, 0.61);
   background-repeat: no-repeat;
   background-size: cover;
   background-blend-mode: darken;
@@ -233,8 +233,15 @@ CARDS
 */
 
 .card {
-  background-color: lightblue;
+  background-color: rgb(245, 247, 168);
   position: relative;
+  box-shadow: -5px 5px 5px 1px #444444;
+  border-radius: 1em;
+}
+
+.card.animated {
+  animation-name: example2;
+  animation-duration: 1.5s;
 }
 
 .card > p {
@@ -244,8 +251,8 @@ CARDS
   padding: 2em;
 }
 
-.card input[type="color"] {
-  width: 50%;
+.card input[type='color'] {
+  width: 30%;
   background: none;
   border: none;
 }
@@ -253,7 +260,56 @@ CARDS
 .card-icon {
   width: 1em;
   position: absolute;
-  left: 0.5em;
-  top: 0.5em;
+  left: 0.8em;
+  top: 0.8em;
   cursor: pointer;
+}
+
+[contentEditable] {
+  outline: none;
+}
+
+@keyframes example {
+  0% {
+    left: 0px;
+    top: -20px;
+    width: 140%;
+    height: auto;
+  }
+  25% {
+    left: 0px;
+    top: 0px;
+    width: 130%;
+    height: auto;
+  }
+  50% {
+    left: 20px;
+    top: 0px;
+    width: 120%;
+    height: auto;
+  }
+  75% {
+    left: -10px;
+    top: 0px;
+    width: 110%;
+    height: auto;
+  }
+  100% {
+    left: 0px;
+    top: 0px;
+    width: 100%;
+    height: auto;
+  }
+}
+
+@keyframes example2 {
+  0% {
+    transform: rotateY(50deg);
+  }
+  50% {
+    transform: rotateY(-30deg);
+  }
+  100% {
+    transform: rotateY(0deg);
+  }
 }
