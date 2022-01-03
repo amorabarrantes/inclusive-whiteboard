@@ -96,9 +96,9 @@ async function showWorkflowStates() {
 
   statesArray.reverse().forEach((state) => {
     const markup = `
-    <div class="state" id="state-${state.id}" data-counter="${state.counter}">
+    <div class="state" id="${state.id}" data-counter="${state.counter}">
       <header class="state-header">
-        <h3>${state.category}</h3>
+        <h3 class="state-category" contenteditable>${state.category}</h3>
         <svg xmlns="http://www.w3.org/2000/svg" class="delete-btn state-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
         </svg>
@@ -138,12 +138,15 @@ async function showWorkflowStates() {
             </svg>
           </div>
         </section>
+        <footer class="state-footer">
+          <button class="btn-addCard">NEW Card</button>
+        </footer>
     </div>
     `;
     stateContainer.insertAdjacentHTML('afterbegin', markup);
-    const stateElement = document.getElementById(`state-${state.id}`);
+    const stateElement = document.getElementById(`${state.id}`);
 
-    //listeners de los botones de agregar state
+    //listeners add state buttons
     const buttons = stateElement.querySelectorAll('.state-button');
     buttons.forEach((btn, index) => {
       btn.addEventListener('click', () => {
@@ -156,16 +159,82 @@ async function showWorkflowStates() {
       });
     });
 
-    //listener borrar state
+    //listener delete state
     const deleteStateBtn = stateElement.querySelector('.delete-btn');
     deleteStateBtn.addEventListener('click', async () => {
-      const formData = newFormData({ id_state: state.id });
-      const data = await postJSON('../phps/states/deleteState.php', formData);
-      console.log(data);
-      stateElement.remove();
+      if (stateElement.parentElement.childElementCount === 1) {
+        alert('Workflows must have at least one state')
+      } else {
+        const formData = newFormData({ id_state: state.id });
+        await postJSON('../phps/states/deleteState.php', formData);
+        stateElement.remove();
+      }
     });
+
+    //listener change.
+    const categoryTitle = stateElement.querySelector('.state-category');
+    categoryTitle.addEventListener('focusout', function () {
+      alert('Saved correctly')
+      console.log("hola");
+    }, false);
+
+    //add Card btn.
+    const addCardBtn = stateElement.querySelector('.btn-addCard');
+    addCardBtn.addEventListener('click', () => {
+      addCard(stateElement);
+    });
+
+    showStateCards(state.id);
   });
 }
+
+async function showStateCards(id_state) {
+  const stateCardElement = document.getElementById(id_state).querySelector('.state-cards');
+  const formData = newFormData({ id_state });
+  const data = await postJSON('../phps/cards/getCards.php', formData);
+  data.forEach(({ id, text }) => {
+    const markup = `
+        <div class="card" data-id=${id}>
+          <p contenteditable>${text}</p>
+          <footer>
+            <input type="color"></>
+          </footer>
+          <svg xmlns="http://www.w3.org/2000/svg" class="card-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
+          </svg>
+        </div>
+    `;
+
+    stateCardElement.insertAdjacentHTML('afterbegin', markup);
+  })
+
+}
+
+
+async function addCard(stateElement) {
+  const stateCardsElement = stateElement.querySelector('.state-cards');
+
+  const text = `TYPE TEXT HERE`;
+  const id_state = stateElement.id;
+
+  const formData = newFormData({ id_state, text });
+  const { id_card: id, result } = await postJSON('../phps/cards/addCard.php', formData);
+
+  if (!result) return;
+
+  const markup = `
+    <div class="card" data-id=${id}>
+      <p contenteditable>${text}</p>
+      <footer>
+        <input type="color"></>
+      </footer>
+      <svg xmlns="http://www.w3.org/2000/svg" class="card-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
+      </svg>
+    </div>
+  `;
+  stateCardsElement.insertAdjacentHTML('afterbegin', markup);
+};
 
 // EVENT LISTENERS
 const form = document.querySelector('.new-workflow-form');
