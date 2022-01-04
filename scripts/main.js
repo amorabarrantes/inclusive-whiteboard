@@ -1,9 +1,10 @@
 import { newFormData, postJSON } from './helpers.js';
+import { newCardMarkup, newCardListeners, movedCard } from './cards.js';
+
 const userId = JSON.parse(window.localStorage.getItem('user')).id_user;
 const modal = document.getElementById('myModal');
 const stateModal = document.getElementById('myModal2');
 const workflowCb = document.getElementById('workflow-cb');
-let movedCard;
 
 //new state info
 let counter;
@@ -151,7 +152,6 @@ async function showWorkflowStates() {
     const buttons = stateElement.querySelectorAll('.state-button');
     buttons.forEach((btn, index) => {
       btn.addEventListener('click', () => {
-        console.log(stateModal);
         stateModal.style.display = 'block';
         counter =
           index === 0
@@ -178,7 +178,6 @@ async function showWorkflowStates() {
       'focusout',
       function () {
         alert('Saved correctly');
-        console.log('hola');
       },
       false
     );
@@ -224,73 +223,26 @@ async function showStateCards(id_state) {
   const formData = newFormData({ id_state });
   const data = await postJSON('../phps/cards/getCards.php', formData);
   data.forEach(({ id, text }) => {
-    const markup = `
-        <div class="card" data-id=${id} id=${id} draggable="true">
-          <p class="card-text">${text}</p>
-          <footer>
-            <input type="color"></>
-          </footer>
-          <svg xmlns="http://www.w3.org/2000/svg" class="card-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
-          </svg>
-        </div>
-    `;
-
+    const markup = newCardMarkup(id, text);
     stateCardElement.insertAdjacentHTML('afterbegin', markup);
     const card = stateCardElement.querySelector('.card');
-
-    const cardEditBtn = card.querySelector('.card-icon');
-    cardEditBtn.addEventListener('click', () => {
-      const cardTextEl = card.querySelector('.card-text');
-      cardEditBtn.classList.add('card-edit-active');
-      cardTextEl.contentEditable = 'true';
-      cardTextEl.focus();
-      const oldText = cardTextEl.innerHTML.trim();
-      cardTextEl.addEventListener('focusout', async (e) => {
-        cardEditBtn.classList.remove('card-edit-active');
-        cardTextEl.contentEditable = 'false';
-        if (oldText !== e.target.innerHTML.trim()) {
-          const id_card = card.dataset.id;
-          const text = e.target.innerHTML.trim();
-          const formData = newFormData({ id_card, text });
-          const data = await postJSON('../phps/cards/editCard.php', formData);
-          console.log(data);
-        }
-      });
-    });
-
-    //DRAGGABLE LOGIC
-    card.addEventListener('dragstart', (e) => {
-      movedCard = card;
-    });
+    newCardListeners(card);
   });
 }
 
 async function addCard(stateElement) {
   const stateCardsElement = stateElement.querySelector('.state-cards');
-
-  const text = `TYPE TEXT HERE`;
   const id_state = stateElement.id;
+  const text = `TYPE TEXT HERE`;
 
   const formData = newFormData({ id_state, text });
   const { id_card: id, result } = await postJSON(
     '../phps/cards/addCard.php',
     formData
   );
-
   if (!result) return;
 
-  const markup = `
-    <div class="card animated" data-id=${id} draggable>
-      <p class="card-text">${text}</p>
-      <footer>
-        <input type="color"></>
-      </footer>
-      <svg xmlns="http://www.w3.org/2000/svg" class="card-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
-      </svg>
-    </div>
-  `;
+  const markup = newCardMarkup(id, text);
   stateCardsElement.insertAdjacentHTML('afterbegin', markup);
 }
 
