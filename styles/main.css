@@ -262,7 +262,7 @@ CARDS
   border: none;
 }
 
-.card-icon {
+.delete-card-icon {
   stroke: grey;
   width: 1em;
   position: absolute;
