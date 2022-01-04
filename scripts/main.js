@@ -3,6 +3,7 @@ const userId = JSON.parse(window.localStorage.getItem('user')).id_user;
 const modal = document.getElementById('myModal');
 const stateModal = document.getElementById('myModal2');
 const workflowCb = document.getElementById('workflow-cb');
+let movedCard;
 
 //new state info
 let counter;
@@ -182,6 +183,30 @@ async function showWorkflowStates() {
       false
     );
 
+    //listener ondragenter
+    stateElement.addEventListener('dragenter', (e) => {
+      stateElement.classList.add('over');
+    });
+
+    stateElement.addEventListener('dragleave', (e) => {});
+    stateElement.addEventListener('dragover', (e) => {
+      if (e.preventDefault) {
+        e.preventDefault();
+      }
+
+      return false;
+    });
+
+    stateElement.addEventListener('drop', (e) => {
+      const container = e.target.closest('.state');
+      movedCard.style.opacity = '1';
+      if (!container) return;
+      const stateCards = stateElement.querySelector('.state-cards');
+      stateCards.insertAdjacentElement('afterbegin', movedCard);
+      e.stopPropagation();
+      return false;
+    });
+
     //add Card btn.
     const addCardBtn = stateElement.querySelector('.btn-addCard');
     addCardBtn.addEventListener('click', () => {
@@ -200,8 +225,8 @@ async function showStateCards(id_state) {
   const data = await postJSON('../phps/cards/getCards.php', formData);
   data.forEach(({ id, text }) => {
     const markup = `
-        <div class="card" data-id=${id}>
-          <p contenteditable>${text}</p>
+        <div class="card" data-id=${id} id=${id} draggable="true">
+          <p class="card-text">${text}</p>
           <footer>
             <input type="color"></>
           </footer>
@@ -212,6 +237,32 @@ async function showStateCards(id_state) {
     `;
 
     stateCardElement.insertAdjacentHTML('afterbegin', markup);
+    const card = stateCardElement.querySelector('.card');
+
+    const cardEditBtn = card.querySelector('.card-icon');
+    cardEditBtn.addEventListener('click', () => {
+      const cardTextEl = card.querySelector('.card-text');
+      cardEditBtn.classList.add('card-edit-active');
+      cardTextEl.contentEditable = 'true';
+      cardTextEl.focus();
+      const oldText = cardTextEl.innerHTML.trim();
+      cardTextEl.addEventListener('focusout', async (e) => {
+        cardEditBtn.classList.remove('card-edit-active');
+        cardTextEl.contentEditable = 'false';
+        if (oldText !== e.target.innerHTML.trim()) {
+          const id_card = card.dataset.id;
+          const text = e.target.innerHTML.trim();
+          const formData = newFormData({ id_card, text });
+          const data = await postJSON('../phps/cards/editCard.php', formData);
+          console.log(data);
+        }
+      });
+    });
+
+    //DRAGGABLE LOGIC
+    card.addEventListener('dragstart', (e) => {
+      movedCard = card;
+    });
   });
 }
 
@@ -230,8 +281,8 @@ async function addCard(stateElement) {
   if (!result) return;
 
   const markup = `
-    <div class="card animated" data-id=${id}>
-      <p contenteditable>${text}</p>
+    <div class="card animated" data-id=${id} draggable>
+      <p class="card-text">${text}</p>
       <footer>
         <input type="color"></>
       </footer>

@@ -201,6 +201,10 @@ td {
   stroke: #fefefe;
 }
 
+.state.over {
+  border: 3px dotted rgb(0, 0, 0);
+}
+
 select,
 select::after {
   border-radius: 0.5em;
@@ -235,13 +239,14 @@ CARDS
 .card {
   background-color: rgb(245, 247, 168);
   position: relative;
-  box-shadow: -5px 5px 5px 1px #444444;
+  box-shadow: -5px 5px 5px 1px #313131;
   border-radius: 1em;
+  color: #7c7c7c;
 }
 
 .card.animated {
-  animation-name: example2;
-  animation-duration: 1.5s;
+  animation-name: dropping-card;
+  animation-duration: 1s;
 }
 
 .card > p {
@@ -258,6 +263,7 @@ CARDS
 }
 
 .card-icon {
+  stroke: grey;
   width: 1em;
   position: absolute;
   left: 0.8em;
@@ -269,45 +275,17 @@ CARDS
   outline: none;
 }
 
-@keyframes example {
-  0% {
-    left: 0px;
-    top: -20px;
-    width: 140%;
-    height: auto;
-  }
-  25% {
-    left: 0px;
-    top: 0px;
-    width: 130%;
-    height: auto;
-  }
-  50% {
-    left: 20px;
-    top: 0px;
-    width: 120%;
-    height: auto;
-  }
-  75% {
-    left: -10px;
-    top: 0px;
-    width: 110%;
-    height: auto;
-  }
-  100% {
-    left: 0px;
-    top: 0px;
-    width: 100%;
-    height: auto;
-  }
+.card-edit-active {
+  stroke: rgb(0, 0, 0);
 }
 
-@keyframes example2 {
+@keyframes dropping-card {
   0% {
     transform: rotateY(50deg);
   }
   50% {
-    transform: rotateY(-30deg);
+    transform: rotateY(-60deg);
+    transform: rotate(2deg);
   }
   100% {
     transform: rotateY(0deg);
