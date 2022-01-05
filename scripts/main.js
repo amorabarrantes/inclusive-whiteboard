@@ -2,10 +2,11 @@ import { newFormData, postJSON } from './helpers.js';
 import { newCardMarkup, newCardListeners, movedCard } from './cards.js';
 import { readWorkflow, pause, resume } from './textToSpeech.js';
 
-const userId = JSON.parse(window.localStorage.getItem('user')).id_user;
+const userId = JSON.parse(window.localStorage.getItem('user'))?.id_user;
 const modal = document.getElementById('myModal');
 const stateModal = document.getElementById('myModal2');
 export const workflowCb = document.getElementById('workflow-cb');
+let editingWorkflow = false;
 
 //new state info
 let counter;
@@ -23,6 +24,9 @@ async function getWorkflows() {
     '../phps/workflows/getWorkflows.php',
     formData
   );
+
+  if (!workflowsArray.length) return;
+
   workflowCb.innerHTML = '';
   workflowsArray.forEach((workflow) => {
     const markup = `
@@ -37,35 +41,86 @@ async function getWorkflows() {
 }
 
 async function addWorkflow() {
-  const workflowName = document.getElementById('new-workflow-name').value;
-  const workflowDescription = document.getElementById(
-    'new-workflow-description'
-  ).value;
+  const workflowName = document.getElementById('new-workflow-name');
+  const workflowDescription = document.getElementById('new-workflow-description');
 
-  if (!workflowName || !workflowDescription)
-    alert('You need to add the data of the workflow');
+  if (!workflowName.value || !workflowDescription.value)
+    return alert('You need to add the data of the workflow');
 
   const formData = newFormData({
     id_user: userId,
-    name: workflowName,
-    description: workflowDescription,
+    name: workflowName.value,
+    description: workflowDescription.value,
   });
+
   const data = await postJSON('../phps/workflows/addWorkflow.php', formData);
   if (data.result) {
     alert('Workflow agregado correctamente');
   }
+
+  workflowName.value = '';
+  workflowDescription.value = '';
+
   getWorkflows();
   modal.style.display = 'none';
 }
 window.addWorkflow = addWorkflow;
 
+
+
+async function editWorkflow() {
+  const workflowName = document.getElementById('new-workflow-name');
+  const workflowDescription = document.getElementById('new-workflow-description');
+  const selectedWorkflow = workflowCb.options[workflowCb.selectedIndex];
+
+  if (!workflowName.value || !workflowDescription.value)
+    return alert('You need to add the data of the workflow');
+
+  const formData = newFormData({
+    id_workflow: selectedWorkflow?.dataset.id,
+    name: workflowName.value,
+    description: workflowDescription.value,
+  });
+
+  const data = await postJSON('../phps/workflows/editWorkflow.php', formData);
+  if (data.result) {
+    alert('Workflow editado correctamente');
+  }
+
+  console.log(selectedWorkflow);
+  selectedWorkflow.innerHTML = workflowName.value;
+  workflowName.value = '';
+  workflowDescription.value = '';
+
+  modal.style.display = 'none';
+}
+window.editWorkflow = editWorkflow;
+
+
+
+async function deleteWorkflow() {
+  const id_workflow = workflowCb.options[workflowCb.selectedIndex]?.dataset.id
+  const formData = newFormData({ id_workflow });
+  await postJSON('../phps/workflows/deleteWorkflow.php', formData);
+  location.reload();
+}
+window.deleteWorkflow = deleteWorkflow;
+
+
 function toggleModal() {
   const btn = document.getElementById('new-workflow');
+  const btnEdit = document.getElementById('edit-workflow');
 
   const span = document.getElementsByClassName('close');
 
   // When the user clicks the button, open the modal
   btn.onclick = function () {
+    editingWorkflow = false;
+    modal.style.display = 'block';
+  };
+
+  btnEdit.onclick = function () {
+    editingWorkflow = true;
     modal.style.display = 'block';
   };
 
@@ -142,7 +197,7 @@ async function showWorkflowStates() {
           </div>
         </section>
         <footer class="state-footer">
-          <button class="btn-addCard">NEW Card</button>
+          <button class="btn-addCard">New Card</button>
         </footer>
     </div>
     `;
@@ -173,15 +228,23 @@ async function showWorkflowStates() {
       }
     });
 
-    //listener change.
+    //Edit state.
     const categoryTitle = stateElement.querySelector('.state-category');
-    categoryTitle.addEventListener(
-      'focusout',
-      function () {
-        alert('Saved correctly');
-      },
-      false
-    );
+    let oldText;
+    categoryTitle.addEventListener('focusin', function () {
+      oldText = categoryTitle.innerHTML.trim();
+    });
+
+    categoryTitle.addEventListener('focusout', async function (e) {
+      if (oldText !== e.target.innerHTML.trim() && e.target.innerHTML.trim() !== '') {
+        const id_state = state.id;
+        const category = e.target.innerHTML.trim();
+
+        const formData = newFormData({ id_state, category });
+        const edit = await postJSON('../phps/states/editState.php', formData);
+        console.log(edit);
+      }
+    });
 
     //listener ondragenter
     stateElement.addEventListener('dragenter', (e) => {
@@ -197,13 +260,19 @@ async function showWorkflowStates() {
       return false;
     });
 
-    stateElement.addEventListener('drop', (e) => {
+    //Drop card into state
+    stateElement.addEventListener('drop', async (e) => {
       const container = e.target.closest('.state');
       movedCard.style.opacity = '1';
       if (!container) return;
       const stateCards = stateElement.querySelector('.state-cards');
       stateCards.insertAdjacentElement('afterbegin', movedCard);
       e.stopPropagation();
+
+      const id_card = movedCard.id;
+      const id_state = container.id;
+      const formData = newFormData({ id_card, id_state });
+      await postJSON('../phps/cards/moveCard.php', formData);
       return false;
     });
 
@@ -211,7 +280,10 @@ async function showWorkflowStates() {
     const addCardBtn = stateElement.querySelector('.btn-addCard');
     addCardBtn.addEventListener('click', () => {
       addCard(stateElement);
+
     });
+
+    stateContainer.classList.remove('hidden');
 
     showStateCards(state.id);
   });
@@ -245,13 +317,26 @@ async function addCard(stateElement) {
 
   const markup = newCardMarkup(id, text);
   stateCardsElement.insertAdjacentHTML('afterbegin', markup);
+
+  const card = document.getElementById(id);
+  newCardListeners(card);
+}
+
+function verifyLogin() {
+  const userId = window.localStorage.getItem('user');
+  if (!userId) {
+    window.location = '../htmls/index.html';
+  }
 }
 
 // EVENT LISTENERS
 const form = document.querySelector('.new-workflow-form');
 form.addEventListener('submit', (e) => {
   e.preventDefault();
+
+  editingWorkflow ? editWorkflow() : addWorkflow();
 });
+
 
 const stateForm = document.querySelector('.new-state-form');
 stateForm.addEventListener('submit', async (e) => {
@@ -267,6 +352,7 @@ stateForm.addEventListener('submit', async (e) => {
 workflowCb.addEventListener('change', showWorkflowStates);
 
 function init() {
+  verifyLogin();
   getWorkflows();
   toggleModal();
   window.readWorkflow = readWorkflow;
