@@ -295,8 +295,8 @@ async function showStateCards(id_state) {
     .querySelector('.state-cards');
   const formData = newFormData({ id_state });
   const data = await postJSON('../phps/cards/getCards.php', formData);
-  data.forEach(({ id, text }) => {
-    const markup = newCardMarkup(id, text);
+  data.forEach(({ id, text, color }) => {
+    const markup = newCardMarkup(id, text, color);
     stateCardElement.insertAdjacentHTML('afterbegin', markup);
     const card = stateCardElement.querySelector('.card');
     newCardListeners(card);
@@ -307,8 +307,8 @@ async function addCard(stateElement) {
   const stateCardsElement = stateElement.querySelector('.state-cards');
   const id_state = stateElement.id;
   const text = `TYPE TEXT HERE`;
-
-  const formData = newFormData({ id_state, text });
+  const color = '#F5F7A8'
+  const formData = newFormData({ id_state, text , color});
   const { id_card: id, result } = await postJSON(
     '../phps/cards/addCard.php',
     formData

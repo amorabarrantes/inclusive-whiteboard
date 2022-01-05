@@ -12,9 +12,10 @@ ini_set("display_errors", 1);
 
 $id_card=$_REQUEST["id_card"];
 $text=$_REQUEST["text"];
+$color=$_REQUEST["color"];
 $conn2 = obtener_coneccion();
 try {
-  $result = ejecutar_query($conn2, "UPDATE cards SET text = '$text' WHERE id = $id_card RETURNING *");
+  $result = ejecutar_query($conn2, "UPDATE cards SET text = '$text', color = '$color' WHERE id = $id_card RETURNING *");
   if ($row=pg_fetch_row ($result))
   {
       echo json_encode(array('result'=> true));

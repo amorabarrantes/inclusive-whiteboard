@@ -25,11 +25,13 @@ CREATE TABLE states (
 	counter INT not null
 );
 
+
 CREATE TABLE cards (
 	id SERIAL PRIMARY KEY,
 	id_state INT NOT NULL,
 	FOREIGN KEY (id_state) REFERENCES states ON DELETE CASCADE,
-	text VARCHAR NOT NULL
+	text VARCHAR NOT NULL,
+	color VARCHAR NOT NULL
 );
 
 

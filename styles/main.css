@@ -263,7 +263,7 @@ CARDS
 
 .card input[type="color"] {
   width: 30%;
-  background: none;
+  /* background: none; */
   border: none;
 }
 

@@ -12,9 +12,10 @@ ini_set("display_errors", 1);
 
 $id_state=$_REQUEST["id_state"];
 $text=$_REQUEST["text"];
+$color=$_REQUEST["color"];
 $conn2 = obtener_coneccion();
 try {
-  $result = ejecutar_query($conn2, "INSERT INTO cards (id_state,  text) VALUES ($id_state, '$text') RETURNING *");
+  $result = ejecutar_query($conn2, "INSERT INTO cards (id_state,  text, color) VALUES ($id_state, '$text', '$color') RETURNING *");
   if ($row=pg_fetch_row ($result))
   {
       echo json_encode(array('id_card'=>$row[0], 'result'=> true));
