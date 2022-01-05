@@ -30,7 +30,7 @@ async function getWorkflows() {
   workflowCb.innerHTML = '';
   workflowsArray.forEach((workflow) => {
     const markup = `
-    <option value="${workflow.name}" data-id=${workflow.id}>
+    <option class="${workflow.id}" value="${workflow.name}" data-id=${workflow.id}>
     ${workflow.name}
     </option>
     `;
