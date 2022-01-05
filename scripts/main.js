@@ -45,7 +45,7 @@ async function addWorkflow() {
   const workflowDescription = document.getElementById('new-workflow-description');
 
   if (!workflowName.value || !workflowDescription.value)
-    return alert('You need to add the data of the workflow');
+    return alert('You need fill the fields');
 
   const formData = newFormData({
     id_user: userId,
@@ -74,7 +74,7 @@ async function editWorkflow() {
   const selectedWorkflow = workflowCb.options[workflowCb.selectedIndex];
 
   if (!workflowName.value || !workflowDescription.value)
-    return alert('You need to add the data of the workflow');
+    return alert('You need fill the fields');
 
   const formData = newFormData({
     id_workflow: selectedWorkflow?.dataset.id,
@@ -359,4 +359,5 @@ function init() {
   window.pause = pause;
   window.resume = resume;
 }
+
 init();
