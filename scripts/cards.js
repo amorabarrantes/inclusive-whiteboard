@@ -18,6 +18,8 @@ export function newCardMarkup(id, text) {
   `;
 }
 
+
+
 export function newCardListeners(cardEl) {
   const cardEditBtn = cardEl.querySelector('.delete-card-icon');
   const cardTextEl = cardEl.querySelector('.card-text');
@@ -38,7 +40,6 @@ export function newCardListeners(cardEl) {
     cardTextEl.contentEditable = 'false';
 
     // If the text is different from what it was before, then update it in the database
-    console.log(oldText, e.target.innerHTML.trim());
     if (oldText !== e.target.innerHTML.trim()) {
       console.log('si llega');
       const id_card = cardEl.dataset.id;

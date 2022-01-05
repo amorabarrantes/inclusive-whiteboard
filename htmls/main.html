@@ -17,6 +17,15 @@
         <label for="workflow"><strong>Workflow</strong></label>
         <select name="workflow" id="workflow-cb"></select>
         <button id="new-workflow" class="btn-header">New</button>
+        <button id="read-workflow" onclick="readWorkflow()" class="btn-header">
+          Read board
+        </button>
+        <button id="pause-workflow" onclick="pause()" class="btn-header">
+          Pause reading
+        </button>
+        <button id="resume-workflow" onclick="resume()" class="btn-header">
+          resume reading
+        </button>
       </div>
 
       <button onclick="logout()" class="btn-header">Sign out</button>

@@ -1,10 +1,11 @@
 import { newFormData, postJSON } from './helpers.js';
 import { newCardMarkup, newCardListeners, movedCard } from './cards.js';
+import { readWorkflow, pause, resume } from './textToSpeech.js';
 
 const userId = JSON.parse(window.localStorage.getItem('user')).id_user;
 const modal = document.getElementById('myModal');
 const stateModal = document.getElementById('myModal2');
-const workflowCb = document.getElementById('workflow-cb');
+export const workflowCb = document.getElementById('workflow-cb');
 
 //new state info
 let counter;
@@ -187,7 +188,7 @@ async function showWorkflowStates() {
       stateElement.classList.add('over');
     });
 
-    stateElement.addEventListener('dragleave', (e) => {});
+    stateElement.addEventListener('dragleave', (e) => { });
     stateElement.addEventListener('dragover', (e) => {
       if (e.preventDefault) {
         e.preventDefault();
@@ -268,5 +269,8 @@ workflowCb.addEventListener('change', showWorkflowStates);
 function init() {
   getWorkflows();
   toggleModal();
+  window.readWorkflow = readWorkflow;
+  window.pause = pause;
+  window.resume = resume;
 }
 init();
