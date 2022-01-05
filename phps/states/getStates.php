@@ -11,7 +11,7 @@ ini_set("display_errors", 1);
 $id_workflow=$_REQUEST["id_workflow"];
 
 $conn = obtener_coneccion();
-$result = ejecutar_query($conn, "SELECT * FROM states WHERE id_workflow = '$id_workflow'");
+$result = ejecutar_query($conn, "SELECT * FROM states WHERE id_workflow = '$id_workflow' order by counter");
 $arr = pg_fetch_all($result);
 print(json_encode($arr));
 pg_close($conn);
