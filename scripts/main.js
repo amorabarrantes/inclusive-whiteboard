@@ -42,7 +42,9 @@ async function getWorkflows() {
 
 async function addWorkflow() {
   const workflowName = document.getElementById('new-workflow-name');
-  const workflowDescription = document.getElementById('new-workflow-description');
+  const workflowDescription = document.getElementById(
+    'new-workflow-description'
+  );
 
   if (!workflowName.value || !workflowDescription.value)
     return alert('You need fill the fields');
@@ -66,11 +68,11 @@ async function addWorkflow() {
 }
 window.addWorkflow = addWorkflow;
 
-
-
 async function editWorkflow() {
   const workflowName = document.getElementById('new-workflow-name');
-  const workflowDescription = document.getElementById('new-workflow-description');
+  const workflowDescription = document.getElementById(
+    'new-workflow-description'
+  );
   const selectedWorkflow = workflowCb.options[workflowCb.selectedIndex];
 
   if (!workflowName.value || !workflowDescription.value)
@@ -96,16 +98,13 @@ async function editWorkflow() {
 }
 window.editWorkflow = editWorkflow;
 
-
-
 async function deleteWorkflow() {
-  const id_workflow = workflowCb.options[workflowCb.selectedIndex]?.dataset.id
+  const id_workflow = workflowCb.options[workflowCb.selectedIndex]?.dataset.id;
   const formData = newFormData({ id_workflow });
   await postJSON('../phps/workflows/deleteWorkflow.php', formData);
   location.reload();
 }
 window.deleteWorkflow = deleteWorkflow;
-
 
 function toggleModal() {
   const btn = document.getElementById('new-workflow');
@@ -236,7 +235,10 @@ async function showWorkflowStates() {
     });
 
     categoryTitle.addEventListener('focusout', async function (e) {
-      if (oldText !== e.target.innerHTML.trim() && e.target.innerHTML.trim() !== '') {
+      if (
+        oldText !== e.target.innerHTML.trim() &&
+        e.target.innerHTML.trim() !== ''
+      ) {
         const id_state = state.id;
         const category = e.target.innerHTML.trim();
 
@@ -251,7 +253,7 @@ async function showWorkflowStates() {
       stateElement.classList.add('over');
     });
 
-    stateElement.addEventListener('dragleave', (e) => { });
+    stateElement.addEventListener('dragleave', (e) => {});
     stateElement.addEventListener('dragover', (e) => {
       if (e.preventDefault) {
         e.preventDefault();
@@ -280,7 +282,6 @@ async function showWorkflowStates() {
     const addCardBtn = stateElement.querySelector('.btn-addCard');
     addCardBtn.addEventListener('click', () => {
       addCard(stateElement);
-
     });
 
     stateContainer.classList.remove('hidden');
@@ -307,8 +308,8 @@ async function addCard(stateElement) {
   const stateCardsElement = stateElement.querySelector('.state-cards');
   const id_state = stateElement.id;
   const text = `TYPE TEXT HERE`;
-  const color = '#F5F7A8'
-  const formData = newFormData({ id_state, text , color});
+  const color = '#F5F7A8';
+  const formData = newFormData({ id_state, text, color });
   const { id_card: id, result } = await postJSON(
     '../phps/cards/addCard.php',
     formData
@@ -336,7 +337,6 @@ form.addEventListener('submit', (e) => {
 
   editingWorkflow ? editWorkflow() : addWorkflow();
 });
-
 
 const stateForm = document.querySelector('.new-state-form');
 stateForm.addEventListener('submit', async (e) => {

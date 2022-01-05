@@ -11,7 +11,7 @@ function obtener_coneccion()
     $port="5432";
     $dbname="whiteboard_db";
     $user="postgres";
-    $password="binns2000";
+    $password="12345";
     $conn=pg_connect("host=$host port=$port dbname=$dbname user=$user password=$password");
     if (!$conn) 
     {

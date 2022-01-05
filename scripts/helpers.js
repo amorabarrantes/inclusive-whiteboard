@@ -2,9 +2,9 @@
 const AJAX = async function (url, method, formData) {
   const fetchPro = formData
     ? fetch(url, {
-      method,
-      body: formData,
-    })
+        method,
+        body: formData,
+      })
     : fetch(url);
   const response = await fetchPro;
   return await response.json();
