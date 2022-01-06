@@ -196,7 +196,7 @@ async function showWorkflowStates() {
           </div>
         </section>
         <footer class="state-footer">
-          <button class="btn-addCard">New Card</button>
+          <button class="btn-add-card">New Card</button>
         </footer>
     </div>
     `;
@@ -273,7 +273,7 @@ async function showWorkflowStates() {
     });
 
     //add Card btn.
-    const addCardBtn = stateElement.querySelector('.btn-addCard');
+    const addCardBtn = stateElement.querySelector('.btn-add-card');
     addCardBtn.addEventListener('click', () => {
       addCard(stateElement);
     });

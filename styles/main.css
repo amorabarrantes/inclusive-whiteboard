@@ -1,4 +1,4 @@
-@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@200;400;600;900&display=swap");
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@200;400;600;900&display=swap');
 
 *,
 h1,
@@ -16,12 +16,12 @@ h6 {
 html,
 body {
   height: 100%;
-  font-family: "Poppins";
+  font-family: 'Poppins';
   background-color: rgb(245, 245, 245);
 }
 
 .background {
-  background: url("../images/background-2.jpg") rgba(0, 0, 0, 0.61);
+  background: url('../images/background-2.jpg') rgba(0, 0, 0, 0.61);
   background-repeat: no-repeat;
   background-size: cover;
   background-blend-mode: darken;
@@ -234,6 +234,18 @@ select::after {
   color: rgb(243, 252, 249);
 }
 
+.btn-add-card {
+  background-color: rgb(233, 246, 247);
+  padding: 0.5em 1em;
+  border-radius: 0.5em;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.btn-add-card:hover {
+  background-color: white;
+}
+
 /* 
 
 CARDS
@@ -261,7 +273,7 @@ CARDS
   word-wrap: break-word;
 }
 
-.card input[type="color"] {
+.card input[type='color'] {
   width: 30%;
   /* background: none; */
   border: none;
