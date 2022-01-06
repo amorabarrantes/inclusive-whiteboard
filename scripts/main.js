@@ -153,7 +153,7 @@ async function showWorkflowStates() {
 
   statesArray.reverse().forEach((state) => {
     const markup = `
-    <div class="state" id="${state.id}" data-counter="${state.counter}">
+    <div class="state" id="state-${state.id}" data-counter="${state.counter}" data-id="${state.id}">
       <header class="state-header">
         <h3 class="state-category" contenteditable>${state.category}</h3>
         <svg xmlns="http://www.w3.org/2000/svg" class="delete-btn state-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -201,7 +201,7 @@ async function showWorkflowStates() {
     </div>
     `;
     stateContainer.insertAdjacentHTML('afterbegin', markup);
-    const stateElement = document.getElementById(`${state.id}`);
+    const stateElement = document.getElementById(`state-${state.id}`);
 
     //listeners add state buttons
     const buttons = stateElement.querySelectorAll('.state-button');
@@ -248,12 +248,6 @@ async function showWorkflowStates() {
       }
     });
 
-    //listener ondragenter
-    stateElement.addEventListener('dragenter', (e) => {
-      stateElement.classList.add('over');
-    });
-
-    stateElement.addEventListener('dragleave', (e) => {});
     stateElement.addEventListener('dragover', (e) => {
       if (e.preventDefault) {
         e.preventDefault();
@@ -271,8 +265,8 @@ async function showWorkflowStates() {
       stateCards.insertAdjacentElement('afterbegin', movedCard);
       e.stopPropagation();
 
-      const id_card = movedCard.id;
-      const id_state = container.id;
+      const id_card = movedCard.dataset.id;
+      const id_state = container.dataset.id;
       const formData = newFormData({ id_card, id_state });
       await postJSON('../phps/cards/moveCard.php', formData);
       return false;
@@ -292,7 +286,7 @@ async function showWorkflowStates() {
 
 async function showStateCards(id_state) {
   const stateCardElement = document
-    .getElementById(id_state)
+    .getElementById(`state-${id_state}`)
     .querySelector('.state-cards');
   const formData = newFormData({ id_state });
   const data = await postJSON('../phps/cards/getCards.php', formData);
@@ -306,7 +300,7 @@ async function showStateCards(id_state) {
 
 async function addCard(stateElement) {
   const stateCardsElement = stateElement.querySelector('.state-cards');
-  const id_state = stateElement.id;
+  const id_state = stateElement.dataset.id;
   const text = `TYPE TEXT HERE`;
   const color = '#F5F7A8';
   const formData = newFormData({ id_state, text, color });
@@ -316,10 +310,10 @@ async function addCard(stateElement) {
   );
   if (!result) return;
 
-  const markup = newCardMarkup(id, text);
+  const markup = newCardMarkup(id, text, color);
   stateCardsElement.insertAdjacentHTML('afterbegin', markup);
 
-  const card = document.getElementById(id);
+  const card = document.getElementById(`card-${id}`);
   newCardListeners(card);
 }
 

@@ -7,7 +7,7 @@ let oldColor;
 // FUNCTIONS
 export function newCardMarkup(id, text, color) {
   return `
-  <div class="card" style="background-color:${color} "data-id=${id} id=${id} draggable="true">
+  <div class="card animated" style="background-color:${color} "data-id=${id} id="card-${id}" draggable="true">
           <p class="card-text">${text}</p>
           <footer>
             <input class="color-input" type="color" value=${color}></>
@@ -56,8 +56,9 @@ export function newCardListeners(cardEl) {
     if (
       (oldText !== e.target.innerHTML.trim() &&
         e.target.innerHTML.trim() !== '') ||
-      oldColor !== colorInputEl.value
+      (oldColor !== colorInputEl.value && oldColor)
     ) {
+      console.log(cardEl);
       const id_card = cardEl.dataset.id;
       const text = cardTextEl.innerHTML.trim();
 
